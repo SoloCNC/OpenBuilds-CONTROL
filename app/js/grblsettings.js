@@ -33,6 +33,7 @@ var grblSettingCodes = {
   30: "Maximum spindle speed, RPM",
   31: "Minimum spindle speed, RPM",
   32: "Laser-mode enable, boolean",
+  33: "PWM frequency, Hz",
   100: "X-axis steps per millimeter",
   101: "Y-axis steps per millimeter",
   102: "Z-axis steps per millimeter",
@@ -242,6 +243,10 @@ function grblPopulate() {
             <tr title="` + grblConfigDesc['$30'] + `"><td>$30</td><td>Maximum spindle speed, RPM</td><td><input data-role="input" data-clear-button="false" data-append="RPM" type="text" value="` + grblParams['$30'] + `" id="val-` + 30 + `-input"></td><td></td></tr>
             <tr title="` + grblConfigDesc['$31'] + `"><td>$31</td><td>Minimum spindle speed, RPM</td><td><input data-role="input" data-clear-button="false" data-append="RPM" type="text" value="` + grblParams['$31'] + `" id="val-` + 31 + `-input"></td><td></td></tr>
             <tr title="` + grblConfigDesc['$32'] + `"><td>$32</td><td>Laser-mode enable</td><td><select id="val-` + 32 + `-input" value="` + grblParams['$32'] + `"><option value="0">&#x2717; Disable</option><option value="1">&#x2713; Enable</option></select></td><td></td></tr>
+            <tr title="` + grblConfigDesc['$33'] + `"><td>$33</td><td>PWM frequency</td><td><input data-role="input" data-clear-button="false" data-append="Hz" type="text" value="` + grblParams['$33'] + `" id="val-` + 33 + `-input"></td><td></td></tr>
+            <tr title="` + grblConfigDesc['$34'] + `"><td>$34</td><td>PWM off</td><td><input data-role="input" data-clear-button="false" data-append="%" type="text" value="` + grblParams['$34'] + `" id="val-` + 34 + `-input"></td><td></td></tr>
+            <tr title="` + grblConfigDesc['$35'] + `"><td>$35</td><td>PWM min</td><td><input data-role="input" data-clear-button="false" data-append="%" type="text" value="` + grblParams['$35'] + `" id="val-` + 35 + `-input"></td><td></td></tr>
+            <tr title="` + grblConfigDesc['$36'] + `"><td>$36</td><td>PWM max</td><td><input data-role="input" data-clear-button="false" data-append="%" type="text" value="` + grblParams['$36'] + `" id="val-` + 36 + `-input"></td><td></td></tr>
 
             <tr title="` + grblConfigDesc['$100'] + `">
               <td>$100</td>
@@ -288,17 +293,35 @@ function grblPopulate() {
               </td>
             </tr>
 
+            <tr title="` + grblConfigDesc['$103'] + `">
+            <td>$103</td>
+            <td>A-axis steps per dgree</td>
+            <td><input data-role="input" data-clear-button="false" data-append="steps/dgree" type="text" value="` + grblParams['$103'] + `" id="val-` + 103 + `-input"></td>
+            <td>
+              <button title="Calculate Z-Axis Steps per mm" class="button" type="button" onclick="zstepspermm()">
+              <span class="fa-layers fa-fw">
+                  <i class="fas fa-calculator" data-fa-transform="shrink-2"></i>
+                  <span class="fa-layers-text" data-fa-transform="up-16" style="font-weight:600; font-family: Arial; font-size: 10px;">Calc</span>
+                  <span class="fa-layers-text" data-fa-transform="down-19" style="font-weight:600; font-family: Arial; font-size: 10px;">Steps</span>
+                </span>
+              </button>
+            </td>
+          </tr>
+
             <tr title="` + grblConfigDesc['$110'] + `"><td>$110</td><td>X-axis maximum rate, mm/min</td><td><input data-role="input" data-clear-button="false" data-append="mm/min"  type="text" value="` + grblParams['$110'] + `" id="val-` + 110 + `-input"></td><td></td></tr>
             <tr title="` + grblConfigDesc['$111'] + `"><td>$111</td><td>Y-axis maximum rate, mm/min</td><td><input data-role="input" data-clear-button="false" data-append="mm/min"  type="text" value="` + grblParams['$111'] + `" id="val-` + 111 + `-input"></td><td></td></tr>
             <tr title="` + grblConfigDesc['$112'] + `"><td>$112</td><td>Z-axis maximum rate, mm/min</td><td><input data-role="input" data-clear-button="false" data-append="mm/min"  type="text" value="` + grblParams['$112'] + `" id="val-` + 112 + `-input"></td><td></td></tr>
+            <tr title="` + grblConfigDesc['$113'] + `"><td>$113</td><td>A-axis maximum rate, mm/min</td><td><input data-role="input" data-clear-button="false" data-append="dgree/min"  type="text" value="` + grblParams['$113'] + `" id="val-` + 113 + `-input"></td><td></td></tr>
 
             <tr title="` + grblConfigDesc['$120'] + `"><td>$120</td><td>X-axis acceleration, mm/sec<sup>2</sup></td><td><input data-role="input" data-clear-button="false" data-append="mm/sec&sup2" type="text" value="` + grblParams['$120'] + `" id="val-` + 120 + `-input"></td><td></td></tr>
             <tr title="` + grblConfigDesc['$121'] + `"><td>$121</td><td>Y-axis acceleration, mm/sec<sup>2</sup></td><td><input data-role="input" data-clear-button="false" data-append="mm/sec&sup2" type="text" value="` + grblParams['$121'] + `" id="val-` + 121 + `-input"></td><td></td></tr>
             <tr title="` + grblConfigDesc['$122'] + `"><td>$122</td><td>Z-axis acceleration, mm/sec<sup>2</sup></td><td><input data-role="input" data-clear-button="false" data-append="mm/sec&sup2" type="text" value="` + grblParams['$122'] + `" id="val-` + 122 + `-input"></td></td><td></td></tr>
+            <tr title="` + grblConfigDesc['$123'] + `"><td>$123</td><td>A-axis acceleration, dgree/sec<sup>2</sup></td><td><input data-role="input" data-clear-button="false" data-append="dgree/sec&sup2" type="text" value="` + grblParams['$123'] + `" id="val-` + 123 + `-input"></td></td><td></td></tr>
 
             <tr title="` + grblConfigDesc['$130'] + `"><td>$130</td><td>X-axis maximum travel, millimeters</td><td><input data-role="input" data-clear-button="false" data-append="mm" type="text" value="` + grblParams['$130'] + `" id="val-` + 130 + `-input"></td><td></td></tr>
             <tr title="` + grblConfigDesc['$131'] + `"><td>$131</td><td>Y-axis maximum travel, millimeters</td><td><input data-role="input" data-clear-button="false" data-append="mm" type="text" value="` + grblParams['$131'] + `" id="val-` + 131 + `-input"></td><td></td></tr>
             <tr title="` + grblConfigDesc['$132'] + `"><td>$132</td><td>Z-axis maximum travel, millimeters</td><td><input data-role="input" data-clear-button="false" data-append="mm" type="text" value="` + grblParams['$132'] + `" id="val-` + 132 + `-input"></td><td></td></tr>
+            <tr title="` + grblConfigDesc['$133'] + `"><td>$133</td><td>A-axis maximum travel, dgrees</td><td><input data-role="input" data-clear-button="false" data-append="dgree" type="text" value="` + grblParams['$133'] + `" id="val-` + 133 + `-input"></td><td></td></tr>
 
             </tbody>
             </table>
