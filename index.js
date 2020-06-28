@@ -323,9 +323,7 @@ var status = {
       x: 0.00,
       y: 0.00,
       z: 0.00,
-      state: -1,
-      plate: 0.00,
-      request: {}
+      state: -1
     },
     position: {
       work: {
@@ -926,33 +924,28 @@ io.on("connection", function(socket) {
 
         // [PRB:0.000,0.000,0.000:0]
         if (data.indexOf("[PRB:") === 0) {
-          if (status.machine.probe.request.plate) {
-            debug_log(data)
-            var prbLen = data.substr(5).search(/\]/);
-            var prbData = data.substr(5, prbLen).split(/,/);
-            var success = data.split(':')[2].split(']')[0];
-            status.machine.probe.x = prbData[0];
-            status.machine.probe.y = prbData[1];
-            status.machine.probe.z = prbData[2];
-            status.machine.probe.state = success;
-            if (success > 0) {
-              var output = {
-                'command': '[ PROBE ]',
-                'response': "Probe Completed.  Setting Z to " + status.machine.probe.plate + 'mm',
-              }
-              io.sockets.emit('data', output);
-              addQToEnd('G10 P1 L20 Z' + status.machine.probe.plate);
-              send1Q();
-            } else {
-              var output = {
-                'command': '[ PROBE ]',
-                'response': "Probe move aborted - probe did not make contact within specified distance",
-              }
-              io.sockets.emit('data', output);
+          debug_log(data)
+          var prbLen = data.substr(5).search(/\]/);
+          var prbData = data.substr(5, prbLen).split(/,/);
+          var success = data.split(':')[2].split(']')[0];
+          status.machine.probe.x = prbData[0];
+          status.machine.probe.y = prbData[1];
+          status.machine.probe.z = prbData[2].split(':')[0];
+          status.machine.probe.state = success;
+          if (success > 0) {
+            var output = {
+              'command': '[ PROBE ]',
+              'response': "Probe Completed.",
             }
-            io.sockets.emit('prbResult', status);
-            status.machine.probe.request = "";
+            io.sockets.emit('data', output);
+          } else {
+            var output = {
+              'command': '[ PROBE ]',
+              'response': "Probe move ERROR - probe did not make contact within specified distance",
+            }
+            io.sockets.emit('data', output);
           }
+          io.sockets.emit('prbResult', status.machine.probe);
         };
 
         // Machine Identification
@@ -1181,37 +1174,12 @@ io.on("connection", function(socket) {
             addQToEnd(tosend);
           }
         }
-        if (i > 0) {
-          status.comms.runStatus = 'Running'
-          // debug_log('sending ' + JSON.stringify(gcodeQueue))
-          send1Q();
-        }
+        status.comms.runStatus = 'Running'
+        // debug_log('sending ' + JSON.stringify(gcodeQueue))
+        send1Q();
       }
     } else {
       debug_log('ERROR: Machine connection not open!');
-    }
-  });
-
-  socket.on('zProbe', function(data) {
-    debug_log('Probing ' + data.direction + ' down to ' + data.dist + "mm at " + data.feedrate + "mm/min and then subtracting a plate of " + data.plate + "mm")
-    status.machine.probe.request = data;
-    status.machine.probe.x = 0.00;
-    status.machine.probe.y = 0.00;
-    status.machine.probe.z = 0.00;
-    status.machine.probe.state = -1;
-    status.machine.probe.plate = data.plate;
-    switch (status.machine.firmware.type) {
-      case 'grbl':
-        addQToEnd('G21');
-        addQToEnd('G10 P1 L20 Z0');
-        addQToEnd('G38.2 Z-' + data.dist + ' F' + data.feedrate);
-        send1Q();
-        break;
-        debug_log('ERROR: Unsupported firmware!');
-        break;
-      default:
-        debug_log('ERROR: Unsupported firmware!');
-        break;
     }
   });
 
@@ -1675,28 +1643,31 @@ function readFile(path) {
   }
 }
 
-function machineSend(gcode) {
-  // console.time('MachineSend');
-  // debug_log("SENDING: " + gcode)
+function machineSend(gcode, realtime) {
+  debug_log("SENDING: " + gcode)
   if (port.isOpen) {
-    if (gcode.match(/T([\d.]+)/i)) {
-      var tool = parseFloat(RegExp.$1);
-      status.machine.tool.nexttool.number = tool
-      status.machine.tool.nexttool.line = gcode
+    if (realtime) {
+      // realtime commands doesnt count toward the queue, does not generate OK
+      port.write(gcode);
+    } else {
+      if (gcode.match(/T([\d.]+)/i)) {
+        var tool = parseFloat(RegExp.$1);
+        status.machine.tool.nexttool.number = tool
+        status.machine.tool.nexttool.line = gcode
+      }
+      var queueLeft = parseInt((gcodeQueue.length - queuePointer))
+      var queueTotal = parseInt(gcodeQueue.length)
+      // debug_log("Q: " + queueLeft)
+      var data = []
+      data.push(queueLeft);
+      data.push(queueTotal);
+      io.sockets.emit("queueCount", data);
+      // debug_log(gcode)
+      port.write(gcode);
     }
-    var queueLeft = parseInt((gcodeQueue.length - queuePointer))
-    var queueTotal = parseInt(gcodeQueue.length)
-    // debug_log("Q: " + queueLeft)
-    var data = []
-    data.push(queueLeft);
-    data.push(queueTotal);
-    io.sockets.emit("queueCount", data);
-    // debug_log(gcode)
-    port.write(gcode);
   } else {
     debug_log("PORT NOT OPEN")
   }
-  // console.timeEnd('MachineSend');
 }
 
 function stopPort() {
@@ -1979,7 +1950,7 @@ function send1Q() {
             gcode = gcodeQueue[queuePointer];
             queuePointer++;
             sentBuffer.push(gcode);
-            machineSend(gcode + '\n');
+            machineSend(gcode + '\n', false);
             // debug_log('Sent: ' + gcode + ' Q: ' + (gcodeQueue.length - queuePointer) + ' Bspace: ' + (spaceLeft - gcode.length - 1));
           } else {
             status.comms.blocked = true;
@@ -2017,7 +1988,7 @@ function addQToStart(gcode) {
 
 function addQRealtime(gcode) {
   // realtime command skip the send1Q as it doesnt respond with an ok
-  machineSend(gcode);
+  machineSend(gcode, true);
 }
 
 // Electron
@@ -2372,6 +2343,7 @@ function stop(jog) {
         if (jog) {
           addQRealtime(String.fromCharCode(0x85)); // canceljog
           debug_log('Sent: 0x85 Jog Cancel');
+          debug_log(queuePointer, gcodeQueue)
         } else {
           addQRealtime('!'); // hold
           debug_log('Sent: !');
@@ -2405,7 +2377,7 @@ function stop(jog) {
 }
 
 function pause() {
-  if (status.comms.connectionStatus > 0) {
+  if (status.comms.connectionStatus == 3) {
     status.comms.paused = true;
     debug_log('PAUSE');
     switch (status.machine.firmware.type) {
