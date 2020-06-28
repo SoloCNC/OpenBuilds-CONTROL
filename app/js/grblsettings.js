@@ -34,6 +34,9 @@ var grblSettingCodes = {
   31: "Minimum spindle speed, RPM",
   32: "Laser-mode enable, boolean",
   33: "PWM frequency, Hz",
+  34: "PWM off value in, %",
+  35: "PWM min value in, %",
+  36: "PWM max value in, %",
   100: "X-axis steps per millimeter",
   101: "Y-axis steps per millimeter",
   102: "Z-axis steps per millimeter",
@@ -43,9 +46,15 @@ var grblSettingCodes = {
   120: "X-axis acceleration, mm/sec^2",
   121: "Y-axis acceleration, mm/sec^2",
   122: "Z-axis acceleration, mm/sec^2",
+  122: "A-axis acceleration, mm/sec^2",
   130: "X-axis maximum travel, millimeters",
   131: "Y-axis maximum travel, millimeters",
-  132: "Z-axis maximum travel, millimeters"
+  132: "Z-axis maximum travel, millimeters",
+  133: "A-axis maximum travel, millimeters",
+  140: "X-axis driver current, amps",
+  141: "Y-axis driver current, amps",
+  142: "Z-axis driver current, amps",
+  143: "A-axis driver current, amps"
 };
 
 function grblSettings(data) {
@@ -322,6 +331,11 @@ function grblPopulate() {
             <tr title="` + grblConfigDesc['$131'] + `"><td>$131</td><td>Y-axis maximum travel, millimeters</td><td><input data-role="input" data-clear-button="false" data-append="mm" type="text" value="` + grblParams['$131'] + `" id="val-` + 131 + `-input"></td><td></td></tr>
             <tr title="` + grblConfigDesc['$132'] + `"><td>$132</td><td>Z-axis maximum travel, millimeters</td><td><input data-role="input" data-clear-button="false" data-append="mm" type="text" value="` + grblParams['$132'] + `" id="val-` + 132 + `-input"></td><td></td></tr>
             <tr title="` + grblConfigDesc['$133'] + `"><td>$133</td><td>A-axis maximum travel, dgrees</td><td><input data-role="input" data-clear-button="false" data-append="dgree" type="text" value="` + grblParams['$133'] + `" id="val-` + 133 + `-input"></td><td></td></tr>
+
+            <tr title="` + grblConfigDesc['$140'] + `"><td>$140</td><td>X-axis driver current, amps</td><td><input data-role="input" data-clear-button="false" data-append="amps" type="text" value="` + grblParams['$140'] + `" id="val-` + 140 + `-input"></td><td></td></tr>
+            <tr title="` + grblConfigDesc['$141'] + `"><td>$141</td><td>Y-axis driver current, amps</td><td><input data-role="input" data-clear-button="false" data-append="amps" type="text" value="` + grblParams['$141'] + `" id="val-` + 141 + `-input"></td><td></td></tr>
+            <tr title="` + grblConfigDesc['$142'] + `"><td>$142</td><td>Z-axis driver current, amps</td><td><input data-role="input" data-clear-button="false" data-append="amps" type="text" value="` + grblParams['$142'] + `" id="val-` + 142 + `-input"></td><td></td></tr>
+            <tr title="` + grblConfigDesc['$143'] + `"><td>$143</td><td>A-axis driver current, amps</td><td><input data-role="input" data-clear-button="false" data-append="amps" type="text" value="` + grblParams['$143'] + `" id="val-` + 143 + `-input"></td><td></td></tr>
 
             </tbody>
             </table>
