@@ -31,6 +31,7 @@
   "main": "index.js",
   "scripts": {
     "start": "echo \"Please run 'npm run dist' to create a local installer\" ",
+    "debug": "electron --inspect=5858 .",
     "test": "echo \"Error: no test specified\" && exit 0",
     "dist": "electron-builder --ia32 --x64",
     "postinstall": "electron-builder install-app-deps"
