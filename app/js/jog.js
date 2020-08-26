@@ -617,6 +617,74 @@ $(document).ready(function() {
     }
   });
 
+  $('.aM').on('touchstart mousedown', function(ev) {
+    ev.preventDefault();
+    if (allowContinuousJog) { // startJog();
+      var direction = "A-";
+      var distance = 1000;
+
+      if (Object.keys(grblParams).length > 0) {
+        if (parseInt(grblParams.$20) == 1) {
+          // Soft Limits is enabled so lets calculate maximum move distance
+          var mindistance = parseInt(grblParams.$132)
+          var maxdistance = 0; // Grbl all negative coordinates
+          // Negative move:
+          distance = (mindistance + (parseInt(laststatus.machine.position.offset.a) + parseInt(laststatus.machine.position.work.a))) - 1
+        }
+      }
+
+      var feed = $('#jograte').val();
+      socket.emit('runCommand', "$J=G91 G21 " + direction + distance + " F" + feed + "\n");
+      continuousJogRunning = true;
+      $('.aM').click();
+    } else {
+      var feedrate = $('#jograte').val();
+      jog('A', '-' + jogdist, feedrate);
+    }
+    $('#runNewProbeBtn').addClass("disabled")
+    $('#confirmNewProbeBtn').removeClass("disabled")
+  });
+  $('.aM').on('touchend mouseup', function(ev) {
+    ev.preventDefault();
+    if (allowContinuousJog) {
+      cancelJog()
+    }
+  });
+
+  $('.aP').on('touchstart mousedown', function(ev) {
+    ev.preventDefault();
+    if (allowContinuousJog) { // startJog();
+      var direction = "A";
+      var distance = 1000;
+
+      if (Object.keys(grblParams).length > 0) {
+        if (parseInt(grblParams.$20) == 1) {
+          // Soft Limits is enabled so lets calculate maximum move distance
+          var mindistance = parseInt(grblParams.$132)
+          var maxdistance = 0; // Grbl all negative coordinates
+          // Positive move:
+          distance = (maxdistance - (parseInt(laststatus.machine.position.offset.a) + parseInt(laststatus.machine.position.work.a))) - 1
+        }
+      }
+
+      var feed = $('#jograte').val();
+      socket.emit('runCommand', "$J=G91 G21 " + direction + distance + " F" + feed + "\n");
+      continuousJogRunning = true;
+      $('.aP').click();
+    } else {
+      var feedrate = $('#jograte').val();
+      jog('A', jogdist, feedrate);
+    }
+    $('#runNewProbeBtn').addClass("disabled")
+    $('#confirmNewProbeBtn').removeClass("disabled")
+  });
+  $('.aP').on('touchend mouseup', function(ev) {
+    ev.preventDefault();
+    if (allowContinuousJog) {
+      cancelJog()
+    }
+  });
+
 
   $('#homeBtn').on('click', function(ev) {
     home();
