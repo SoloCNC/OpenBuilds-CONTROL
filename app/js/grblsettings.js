@@ -33,18 +33,40 @@ var grblSettingCodes = {
   30: "Maximum spindle speed, RPM",
   31: "Minimum spindle speed, RPM",
   32: "Laser-mode enable, boolean",
+  33: "PWM frequency, Hz",
+  34: "PWM off value in, %",
+  35: "PWM min value in, %",
+  36: "PWM max value in, %",
   100: "X-axis steps per millimeter",
   101: "Y-axis steps per millimeter",
   102: "Z-axis steps per millimeter",
+  103: "A-axis steps per degree",
+  104: "B-axis steps per degree",
+  105: "C-axis steps per degree",
   110: "X-axis maximum rate, mm/min",
   111: "Y-axis maximum rate, mm/min",
   112: "Z-axis maximum rate, mm/min",
+  113: "A-axis maximum rate, degree/min",
+  114: "B-axis maximum rate, degree/min",
+  115: "C-axis maximum rate, degree/min",
   120: "X-axis acceleration, mm/sec^2",
   121: "Y-axis acceleration, mm/sec^2",
   122: "Z-axis acceleration, mm/sec^2",
+  123: "A-axis acceleration, degree/sec^2",
+  124: "B-axis acceleration, degree/sec^2",
+  125: "C-axis acceleration, degree/sec^2",
   130: "X-axis maximum travel, millimeters",
   131: "Y-axis maximum travel, millimeters",
-  132: "Z-axis maximum travel, millimeters"
+  132: "Z-axis maximum travel, millimeters",
+  133: "A-axis maximum travel, degrees",
+  134: "B-axis maximum travel, degrees",
+  135: "C-axis maximum travel, degrees",
+  140: "X-axis driver current, amps",
+  141: "Y-axis driver current, amps",
+  142: "Z-axis driver current, amps",
+  143: "A-axis driver current, amps",
+  144: "B-axis driver current, amps",
+  145: "C-axis driver current, amps"
 };
 
 function grblSettings(data) {
@@ -107,8 +129,10 @@ function grblPopulate() {
                   <div class="cell-8">
                     <a style="width: 100%;" class="button dropdown-toggle bd-openbuilds secondary outline" id="context_toggle2"><img src="img/mch/sphinx55.png"/> Select Machine</a>
                     <ul class="ribbon-dropdown" data-role="dropdown" data-duration="100">
-                      <li><a href="#" onclick="selectMachine('custom');"><img src="img/mch/custom.png" width="16px"/>  Custom Machine</a></li>
-                      <li>
+                    <li><a href="#" onclick="selectMachine('custom');"><img src="img/mch/custom.png" width="16px"/>  Custom Machine</a></li>
+                    <li><a href="#" onclick="selectMachine('grbl-lpc');"><img src="img/mch/custom.png" width="16px"/>  grbl-LPC</a></li>
+                    <li><a href="#" onclick="selectMachine('grbl-mega-5x');"><img src="img/mch/custom.png" width="16px"/>  grbl-Mega-5X</a></li>
+                    <li>
                         <a href="#" class="dropdown-toggle"><img src="img/mch/acro55.png" width="16px"/> OpenBuilds Acro</a>
                         <ul class="ribbon-dropdown" data-role="dropdown">
                           <li onclick="selectMachine('acro55');"><a href="#"><img src="img/mch/acro55.png" width="16px"/>  OpenBuilds Acro 55</a></li>
@@ -245,6 +269,10 @@ function grblPopulate() {
             <tr title="` + grblConfigDesc['$30'] + `"><td>$30</td><td>Maximum spindle speed, RPM</td><td><input data-role="input" data-clear-button="false" data-append="RPM" type="text" value="` + grblParams['$30'] + `" id="val-` + 30 + `-input"></td><td></td></tr>
             <tr title="` + grblConfigDesc['$31'] + `"><td>$31</td><td>Minimum spindle speed, RPM</td><td><input data-role="input" data-clear-button="false" data-append="RPM" type="text" value="` + grblParams['$31'] + `" id="val-` + 31 + `-input"></td><td></td></tr>
             <tr title="` + grblConfigDesc['$32'] + `"><td>$32</td><td>Laser-mode enable</td><td><select id="val-` + 32 + `-input" value="` + grblParams['$32'] + `"><option value="0">&#x2717; Disable</option><option value="1">&#x2713; Enable</option></select></td><td></td></tr>
+            <tr title="` + grblConfigDesc['$33'] + `"><td>$33</td><td>PWM frequency</td><td><input data-role="input" data-clear-button="false" data-append="Hz" type="text" value="` + grblParams['$33'] + `" id="val-` + 33 + `-input"></td><td></td></tr>
+            <tr title="` + grblConfigDesc['$34'] + `"><td>$34</td><td>PWM off</td><td><input data-role="input" data-clear-button="false" data-append="%" type="text" value="` + grblParams['$34'] + `" id="val-` + 34 + `-input"></td><td></td></tr>
+            <tr title="` + grblConfigDesc['$35'] + `"><td>$35</td><td>PWM min</td><td><input data-role="input" data-clear-button="false" data-append="%" type="text" value="` + grblParams['$35'] + `" id="val-` + 35 + `-input"></td><td></td></tr>
+            <tr title="` + grblConfigDesc['$36'] + `"><td>$36</td><td>PWM max</td><td><input data-role="input" data-clear-button="false" data-append="%" type="text" value="` + grblParams['$36'] + `" id="val-` + 36 + `-input"></td><td></td></tr>
 
             <tr title="` + grblConfigDesc['$100'] + `">
               <td>$100</td>
@@ -291,17 +319,54 @@ function grblPopulate() {
               </td>
             </tr>
 
+            <tr title="` + grblConfigDesc['$103'] + `">
+              <td>$103</td>
+              <td>A-axis steps per degree</td>
+              <td><input data-role="input" data-clear-button="false" data-append="steps/degree" type="text" value="` + grblParams['$103'] + `" id="val-` + 103 + `-input"></td>
+              <td></td>
+            </tr>
+
+            <tr title="` + grblConfigDesc['$104'] + `">
+              <td>$104</td>
+              <td>B-axis steps per degree</td>
+              <td><input data-role="input" data-clear-button="false" data-append="steps/degree" type="text" value="` + grblParams['$104'] + `" id="val-` + 104 + `-input"></td>
+              <td></td>
+            </tr>
+
+            <tr title="` + grblConfigDesc['$105'] + `">
+              <td>$105</td>
+              <td>C-axis steps per degree</td>
+              <td><input data-role="input" data-clear-button="false" data-append="steps/degree" type="text" value="` + grblParams['$105'] + `" id="val-` + 105 + `-input"></td>
+              <td></td>
+            </tr>
+
             <tr title="` + grblConfigDesc['$110'] + `"><td>$110</td><td>X-axis maximum rate, mm/min</td><td><input data-role="input" data-clear-button="false" data-append="mm/min"  type="text" value="` + grblParams['$110'] + `" id="val-` + 110 + `-input"></td><td></td></tr>
             <tr title="` + grblConfigDesc['$111'] + `"><td>$111</td><td>Y-axis maximum rate, mm/min</td><td><input data-role="input" data-clear-button="false" data-append="mm/min"  type="text" value="` + grblParams['$111'] + `" id="val-` + 111 + `-input"></td><td></td></tr>
             <tr title="` + grblConfigDesc['$112'] + `"><td>$112</td><td>Z-axis maximum rate, mm/min</td><td><input data-role="input" data-clear-button="false" data-append="mm/min"  type="text" value="` + grblParams['$112'] + `" id="val-` + 112 + `-input"></td><td></td></tr>
+            <tr title="` + grblConfigDesc['$113'] + `"><td>$113</td><td>A-axis maximum rate, mm/min</td><td><input data-role="input" data-clear-button="false" data-append="degree/min"  type="text" value="` + grblParams['$113'] + `" id="val-` + 113 + `-input"></td><td></td></tr>
+            <tr title="` + grblConfigDesc['$114'] + `"><td>$114</td><td>B-axis maximum rate, mm/min</td><td><input data-role="input" data-clear-button="false" data-append="degree/min"  type="text" value="` + grblParams['$114'] + `" id="val-` + 114 + `-input"></td><td></td></tr>
+            <tr title="` + grblConfigDesc['$115'] + `"><td>$115</td><td>C-axis maximum rate, mm/min</td><td><input data-role="input" data-clear-button="false" data-append="degree/min"  type="text" value="` + grblParams['$115'] + `" id="val-` + 115 + `-input"></td><td></td></tr>
 
             <tr title="` + grblConfigDesc['$120'] + `"><td>$120</td><td>X-axis acceleration, mm/sec<sup>2</sup></td><td><input data-role="input" data-clear-button="false" data-append="mm/sec&sup2" type="text" value="` + grblParams['$120'] + `" id="val-` + 120 + `-input"></td><td></td></tr>
             <tr title="` + grblConfigDesc['$121'] + `"><td>$121</td><td>Y-axis acceleration, mm/sec<sup>2</sup></td><td><input data-role="input" data-clear-button="false" data-append="mm/sec&sup2" type="text" value="` + grblParams['$121'] + `" id="val-` + 121 + `-input"></td><td></td></tr>
             <tr title="` + grblConfigDesc['$122'] + `"><td>$122</td><td>Z-axis acceleration, mm/sec<sup>2</sup></td><td><input data-role="input" data-clear-button="false" data-append="mm/sec&sup2" type="text" value="` + grblParams['$122'] + `" id="val-` + 122 + `-input"></td></td><td></td></tr>
+            <tr title="` + grblConfigDesc['$123'] + `"><td>$123</td><td>A-axis acceleration, degree/sec<sup>2</sup></td><td><input data-role="input" data-clear-button="false" data-append="degree/sec&sup2" type="text" value="` + grblParams['$123'] + `" id="val-` + 123 + `-input"></td></td><td></td></tr>
+            <tr title="` + grblConfigDesc['$124'] + `"><td>$123</td><td>B-axis acceleration, degree/sec<sup>2</sup></td><td><input data-role="input" data-clear-button="false" data-append="degree/sec&sup2" type="text" value="` + grblParams['$124'] + `" id="val-` + 124 + `-input"></td></td><td></td></tr>
+            <tr title="` + grblConfigDesc['$125'] + `"><td>$123</td><td>C-axis acceleration, degree/sec<sup>2</sup></td><td><input data-role="input" data-clear-button="false" data-append="degree/sec&sup2" type="text" value="` + grblParams['$125'] + `" id="val-` + 125 + `-input"></td></td><td></td></tr>
 
             <tr title="` + grblConfigDesc['$130'] + `"><td>$130</td><td>X-axis maximum travel, millimeters</td><td><input data-role="input" data-clear-button="false" data-append="mm" type="text" value="` + grblParams['$130'] + `" id="val-` + 130 + `-input"></td><td></td></tr>
             <tr title="` + grblConfigDesc['$131'] + `"><td>$131</td><td>Y-axis maximum travel, millimeters</td><td><input data-role="input" data-clear-button="false" data-append="mm" type="text" value="` + grblParams['$131'] + `" id="val-` + 131 + `-input"></td><td></td></tr>
             <tr title="` + grblConfigDesc['$132'] + `"><td>$132</td><td>Z-axis maximum travel, millimeters</td><td><input data-role="input" data-clear-button="false" data-append="mm" type="text" value="` + grblParams['$132'] + `" id="val-` + 132 + `-input"></td><td></td></tr>
+            <tr title="` + grblConfigDesc['$133'] + `"><td>$133</td><td>A-axis maximum travel, degrees</td><td><input data-role="input" data-clear-button="false" data-append="degree" type="text" value="` + grblParams['$133'] + `" id="val-` + 133 + `-input"></td><td></td></tr>
+            <tr title="` + grblConfigDesc['$134'] + `"><td>$134</td><td>B-axis maximum travel, degrees</td><td><input data-role="input" data-clear-button="false" data-append="degree" type="text" value="` + grblParams['$134'] + `" id="val-` + 134 + `-input"></td><td></td></tr>
+            <tr title="` + grblConfigDesc['$135'] + `"><td>$135</td><td>C-axis maximum travel, degrees</td><td><input data-role="input" data-clear-button="false" data-append="degree" type="text" value="` + grblParams['$135'] + `" id="val-` + 135 + `-input"></td><td></td></tr>
+
+            <tr title="` + grblConfigDesc['$140'] + `"><td>$140</td><td>X-axis driver current, amps</td><td><input data-role="input" data-clear-button="false" data-append="amps" type="text" value="` + grblParams['$140'] + `" id="val-` + 140 + `-input"></td><td></td></tr>
+            <tr title="` + grblConfigDesc['$141'] + `"><td>$141</td><td>Y-axis driver current, amps</td><td><input data-role="input" data-clear-button="false" data-append="amps" type="text" value="` + grblParams['$141'] + `" id="val-` + 141 + `-input"></td><td></td></tr>
+            <tr title="` + grblConfigDesc['$142'] + `"><td>$142</td><td>Z-axis driver current, amps</td><td><input data-role="input" data-clear-button="false" data-append="amps" type="text" value="` + grblParams['$142'] + `" id="val-` + 142 + `-input"></td><td></td></tr>
+            <tr title="` + grblConfigDesc['$143'] + `"><td>$143</td><td>A-axis driver current, amps</td><td><input data-role="input" data-clear-button="false" data-append="amps" type="text" value="` + grblParams['$143'] + `" id="val-` + 143 + `-input"></td><td></td></tr>
+            <tr title="` + grblConfigDesc['$144'] + `"><td>$144</td><td>B-axis driver current, amps</td><td><input data-role="input" data-clear-button="false" data-append="amps" type="text" value="` + grblParams['$144'] + `" id="val-` + 144 + `-input"></td><td></td></tr>
+            <tr title="` + grblConfigDesc['$145'] + `"><td>$145</td><td>C-axis driver current, amps</td><td><input data-role="input" data-clear-button="false" data-append="amps" type="text" value="` + grblParams['$14%'] + `" id="val-` + 145 + `-input"></td><td></td></tr>
 
             </tbody>
             </table>
@@ -314,7 +379,7 @@ function grblPopulate() {
     </div>`
     $('#grblconfig').append(template)
 
-    setTimeout(function() {
+    setTimeout(function () {
       $("#val-32-input").val(parseInt(grblParams['$32'])).trigger("change");
       $("#val-20-input").val(parseInt(grblParams['$20'])).trigger("change");
       $("#val-21-input").val(parseInt(grblParams['$21'])).trigger("change");
@@ -328,23 +393,23 @@ function grblPopulate() {
       $("#val-10-input").val(parseInt(grblParams['$10'])).trigger("change");
     }, 100);;
 
-    $('#grblSettingsTable').on('keyup paste click change', 'input, select', function() {
+    $('#grblSettingsTable').on('keyup paste click change', 'input, select', function () {
       checkifchanged()
     });
 
     // Event Handlers for Switch Checkboxes
-    setTimeout(function() {
-      $('#limitsinstalled:checkbox').change(function() {
+    setTimeout(function () {
+      $('#limitsinstalled:checkbox').change(function () {
         enableLimits();
       });
 
-      $('#xdirinvert:checkbox').change(function() {
+      $('#xdirinvert:checkbox').change(function () {
         changeDirInvert();
       });
-      $('#ydirinvert:checkbox').change(function() {
+      $('#ydirinvert:checkbox').change(function () {
         changeDirInvert();
       });
-      $('#zdirinvert:checkbox').change(function() {
+      $('#zdirinvert:checkbox').change(function () {
         changeDirInvert();
       });
 
@@ -367,7 +432,7 @@ function grblPopulate() {
       $('#homeBtn').attr('disabled', true)
     }
 
-    setTimeout(function() {
+    setTimeout(function () {
       setMachineButton(laststatus.machine.name)
     }, 500)
   }
@@ -443,25 +508,25 @@ function grblSaveSettings() {
     title: "Configuration Updated. Reset Grbl?",
     content: "<div>Some changes in the Grbl Configuration only take effect after a restart/reset of the controller. Would you like to Reset the controller now?</div>",
     actions: [{
-        caption: "Yes",
-        cls: "js-dialog-close secondary",
-        onclick: function() {
-          setTimeout(function() {
-            sendGcode(String.fromCharCode(0x18));
-            setTimeout(function() {
-              refreshGrblSettings()
-            }, 1000);
-          }, 400);
-        }
-      },
-      {
-        caption: "Later",
-        cls: "js-dialog-close",
-        onclick: function() {
-          console.log("Do nothing")
-          refreshGrblSettings();
-        }
+      caption: "Yes",
+      cls: "js-dialog-close secondary",
+      onclick: function () {
+        setTimeout(function () {
+          sendGcode(String.fromCharCode(0x18));
+          setTimeout(function () {
+            refreshGrblSettings()
+          }, 1000);
+        }, 400);
       }
+    },
+    {
+      caption: "Later",
+      cls: "js-dialog-close",
+      onclick: function () {
+        console.log("Do nothing")
+        refreshGrblSettings();
+      }
+    }
     ]
   });
   $('#grblSettingsBadge').hide();
@@ -473,10 +538,10 @@ function refreshGrblSettings() {
   grblParams = {};
   $('#grblconfig').empty();
   $('#grblconfig').append("<center>Please Wait... </center><br><center>Requesting updated parameters from the controller firmware...</center>");
-  setTimeout(function() {
+  setTimeout(function () {
     sendGcode('$$');
     sendGcode('$I');
-    setTimeout(function() {
+    setTimeout(function () {
       grblPopulate();
     }, 500);
   }, 50);
@@ -554,20 +619,20 @@ function clearSettings() {
     title: "Are you sure?",
     content: "<div>Resetting the Grbl Settings will restore all the settings to factory defaults, but will keep other EEPROM settings intact. Would you like to continue?</div>",
     actions: [{
-        caption: "Yes",
-        cls: "js-dialog-close secondary",
-        onclick: function() {
-          sendGcode('$RST=$');
-          refreshGrblSettings()
-        }
-      },
-      {
-        caption: "Cancel",
-        cls: "js-dialog-close",
-        onclick: function() {
-          refreshGrblSettings();
-        }
+      caption: "Yes",
+      cls: "js-dialog-close secondary",
+      onclick: function () {
+        sendGcode('$RST=$');
+        refreshGrblSettings()
       }
+    },
+    {
+      caption: "Cancel",
+      cls: "js-dialog-close",
+      onclick: function () {
+        refreshGrblSettings();
+      }
+    }
     ]
   });
 }
@@ -577,20 +642,20 @@ function clearWCO() {
     title: "Are you sure?",
     content: "<div>Resetting the Work Coordinate Systems will erase all the coordinate system offsets currently stored in the EEPROM on the controller. Would you like to continue?</div>",
     actions: [{
-        caption: "Yes",
-        cls: "js-dialog-close secondary",
-        onclick: function() {
-          sendGcode('$RST=#');
-          refreshGrblSettings()
-        }
-      },
-      {
-        caption: "Cancel",
-        cls: "js-dialog-close",
-        onclick: function() {
-          refreshGrblSettings();
-        }
+      caption: "Yes",
+      cls: "js-dialog-close secondary",
+      onclick: function () {
+        sendGcode('$RST=#');
+        refreshGrblSettings()
       }
+    },
+    {
+      caption: "Cancel",
+      cls: "js-dialog-close",
+      onclick: function () {
+        refreshGrblSettings();
+      }
+    }
     ]
   });
 }
@@ -600,20 +665,20 @@ function clearEEPROM() {
     title: "Are you sure?",
     content: "<div>Resetting the EEPROM will erase all the Grbl Firmware settings from your controller, effectively resetting it back to factory defaults. Would you like to continue?</div>",
     actions: [{
-        caption: "Yes",
-        cls: "js-dialog-close secondary",
-        onclick: function() {
-          sendGcode('$RST=*');
-          refreshGrblSettings()
-        }
-      },
-      {
-        caption: "Cancel",
-        cls: "js-dialog-close",
-        onclick: function() {
-          refreshGrblSettings();
-        }
+      caption: "Yes",
+      cls: "js-dialog-close secondary",
+      onclick: function () {
+        sendGcode('$RST=*');
+        refreshGrblSettings()
       }
+    },
+    {
+      caption: "Cancel",
+      cls: "js-dialog-close",
+      onclick: function () {
+        refreshGrblSettings();
+      }
+    }
     ]
   });
 }
@@ -655,13 +720,25 @@ var grblConfigDesc = {
   $100: "Grbl needs to know how far each step will take the tool in reality.  - use the tools on the right to compute/calibrate",
   $101: "Grbl needs to know how far each step will take the tool in reality.  - use the tools on the right to compute/calibrate",
   $102: "Grbl needs to know how far each step will take the tool in reality.  - use the tools on the right to compute/calibrate",
+  $103: "Grbl needs to know how far each step will take the tool in reality.",
+  $104: "Grbl needs to know how far each step will take the tool in reality.",
+  $105: "Grbl needs to know how far each step will take the tool in reality.",
   $110: "This sets the maximum rate each axis can move. Whenever Grbl plans a move, it checks whether or not the move causes any one of these individual axes to exceed their max rate. If so, it'll slow down the motion to ensure none of the axes exceed their max rate limits. This means that each axis has its own independent speed, which is extremely useful for limiting the typically slower Z-axis. The simplest way to determine these values is to test each axis one at a time by slowly increasing max rate settings and moving it. For example, to test the X-axis, send Grbl something like G0 X50 with enough travel distance so that the axis accelerates to its max speed. You'll know you've hit the max rate threshold when your steppers stall. It'll make a bit of noise, but shouldn't hurt your motors. Enter a setting a 10-20% below this value, so you can account for wear, friction, and the mass of your workpiece/tool. Then, repeat for your other axes. NOTE: This max rate setting also sets the G0 seek rates.",
   $111: "This sets the maximum rate each axis can move. Whenever Grbl plans a move, it checks whether or not the move causes any one of these individual axes to exceed their max rate. If so, it'll slow down the motion to ensure none of the axes exceed their max rate limits. This means that each axis has its own independent speed, which is extremely useful for limiting the typically slower Z-axis. The simplest way to determine these values is to test each axis one at a time by slowly increasing max rate settings and moving it. For example, to test the X-axis, send Grbl something like G0 X50 with enough travel distance so that the axis accelerates to its max speed. You'll know you've hit the max rate threshold when your steppers stall. It'll make a bit of noise, but shouldn't hurt your motors. Enter a setting a 10-20% below this value, so you can account for wear, friction, and the mass of your workpiece/tool. Then, repeat for your other axes. NOTE: This max rate setting also sets the G0 seek rates.",
   $112: "This sets the maximum rate each axis can move. Whenever Grbl plans a move, it checks whether or not the move causes any one of these individual axes to exceed their max rate. If so, it'll slow down the motion to ensure none of the axes exceed their max rate limits. This means that each axis has its own independent speed, which is extremely useful for limiting the typically slower Z-axis. The simplest way to determine these values is to test each axis one at a time by slowly increasing max rate settings and moving it. For example, to test the X-axis, send Grbl something like G0 X50 with enough travel distance so that the axis accelerates to its max speed. You'll know you've hit the max rate threshold when your steppers stall. It'll make a bit of noise, but shouldn't hurt your motors. Enter a setting a 10-20% below this value, so you can account for wear, friction, and the mass of your workpiece/tool. Then, repeat for your other axes. NOTE: This max rate setting also sets the G0 seek rates.",
+  $113: "This sets the maximum rate each axis can move. Whenever Grbl plans a move, it checks whether or not the move causes any one of these individual axes to exceed their max rate. If so, it'll slow down the motion to ensure none of the axes exceed their max rate limits. This means that each axis has its own independent speed, which is extremely useful for limiting the typically slower Z-axis. The simplest way to determine these values is to test each axis one at a time by slowly increasing max rate settings and moving it. For example, to test the X-axis, send Grbl something like G0 X50 with enough travel distance so that the axis accelerates to its max speed. You'll know you've hit the max rate threshold when your steppers stall. It'll make a bit of noise, but shouldn't hurt your motors. Enter a setting a 10-20% below this value, so you can account for wear, friction, and the mass of your workpiece/tool. Then, repeat for your other axes. NOTE: This max rate setting also sets the G0 seek rates.",
+  $114: "This sets the maximum rate each axis can move. Whenever Grbl plans a move, it checks whether or not the move causes any one of these individual axes to exceed their max rate. If so, it'll slow down the motion to ensure none of the axes exceed their max rate limits. This means that each axis has its own independent speed, which is extremely useful for limiting the typically slower Z-axis. The simplest way to determine these values is to test each axis one at a time by slowly increasing max rate settings and moving it. For example, to test the X-axis, send Grbl something like G0 X50 with enough travel distance so that the axis accelerates to its max speed. You'll know you've hit the max rate threshold when your steppers stall. It'll make a bit of noise, but shouldn't hurt your motors. Enter a setting a 10-20% below this value, so you can account for wear, friction, and the mass of your workpiece/tool. Then, repeat for your other axes. NOTE: This max rate setting also sets the G0 seek rates.",
+  $115: "This sets the maximum rate each axis can move. Whenever Grbl plans a move, it checks whether or not the move causes any one of these individual axes to exceed their max rate. If so, it'll slow down the motion to ensure none of the axes exceed their max rate limits. This means that each axis has its own independent speed, which is extremely useful for limiting the typically slower Z-axis. The simplest way to determine these values is to test each axis one at a time by slowly increasing max rate settings and moving it. For example, to test the X-axis, send Grbl something like G0 X50 with enough travel distance so that the axis accelerates to its max speed. You'll know you've hit the max rate threshold when your steppers stall. It'll make a bit of noise, but shouldn't hurt your motors. Enter a setting a 10-20% below this value, so you can account for wear, friction, and the mass of your workpiece/tool. Then, repeat for your other axes. NOTE: This max rate setting also sets the G0 seek rates.",
   $120: "This sets the axes acceleration parameters in mm/second/second. Simplistically, a lower value makes Grbl ease slower into motion, while a higher value yields tighter moves and reaches the desired feed rates much quicker. Much like the max rate setting, each axis has its own acceleration value and are independent of each other. This means that a multi-axis motion will only accelerate as quickly as the lowest contributing axis can. Again, like the max rate setting, the simplest way to determine the values for this setting is to individually test each axis with slowly increasing values until the motor stalls. Then finalize your acceleration setting with a value 10-20% below this absolute max value. This should account for wear, friction, and mass inertia. We highly recommend that you dry test some G-code programs with your new settings before committing to them. Sometimes the loading on your machine is different when moving in all axes together.",
   $121: "This sets the axes acceleration parameters in mm/second/second. Simplistically, a lower value makes Grbl ease slower into motion, while a higher value yields tighter moves and reaches the desired feed rates much quicker. Much like the max rate setting, each axis has its own acceleration value and are independent of each other. This means that a multi-axis motion will only accelerate as quickly as the lowest contributing axis can. Again, like the max rate setting, the simplest way to determine the values for this setting is to individually test each axis with slowly increasing values until the motor stalls. Then finalize your acceleration setting with a value 10-20% below this absolute max value. This should account for wear, friction, and mass inertia. We highly recommend that you dry test some G-code programs with your new settings before committing to them. Sometimes the loading on your machine is different when moving in all axes together.",
   $122: "This sets the axes acceleration parameters in mm/second/second. Simplistically, a lower value makes Grbl ease slower into motion, while a higher value yields tighter moves and reaches the desired feed rates much quicker. Much like the max rate setting, each axis has its own acceleration value and are independent of each other. This means that a multi-axis motion will only accelerate as quickly as the lowest contributing axis can. Again, like the max rate setting, the simplest way to determine the values for this setting is to individually test each axis with slowly increasing values until the motor stalls. Then finalize your acceleration setting with a value 10-20% below this absolute max value. This should account for wear, friction, and mass inertia. We highly recommend that you dry test some G-code programs with your new settings before committing to them. Sometimes the loading on your machine is different when moving in all axes together.",
+  $123: "This sets the axes acceleration parameters in degree/second/second. Simplistically, a lower value makes Grbl ease slower into motion, while a higher value yields tighter moves and reaches the desired feed rates much quicker. Much like the max rate setting, each axis has its own acceleration value and are independent of each other. This means that a multi-axis motion will only accelerate as quickly as the lowest contributing axis can. Again, like the max rate setting, the simplest way to determine the values for this setting is to individually test each axis with slowly increasing values until the motor stalls. Then finalize your acceleration setting with a value 10-20% below this absolute max value. This should account for wear, friction, and mass inertia. We highly recommend that you dry test some G-code programs with your new settings before committing to them. Sometimes the loading on your machine is different when moving in all axes together.",
+  $124: "This sets the axes acceleration parameters in degree/second/second. Simplistically, a lower value makes Grbl ease slower into motion, while a higher value yields tighter moves and reaches the desired feed rates much quicker. Much like the max rate setting, each axis has its own acceleration value and are independent of each other. This means that a multi-axis motion will only accelerate as quickly as the lowest contributing axis can. Again, like the max rate setting, the simplest way to determine the values for this setting is to individually test each axis with slowly increasing values until the motor stalls. Then finalize your acceleration setting with a value 10-20% below this absolute max value. This should account for wear, friction, and mass inertia. We highly recommend that you dry test some G-code programs with your new settings before committing to them. Sometimes the loading on your machine is different when moving in all axes together.",
+  $125: "This sets the axes acceleration parameters in degree/second/second. Simplistically, a lower value makes Grbl ease slower into motion, while a higher value yields tighter moves and reaches the desired feed rates much quicker. Much like the max rate setting, each axis has its own acceleration value and are independent of each other. This means that a multi-axis motion will only accelerate as quickly as the lowest contributing axis can. Again, like the max rate setting, the simplest way to determine the values for this setting is to individually test each axis with slowly increasing values until the motor stalls. Then finalize your acceleration setting with a value 10-20% below this absolute max value. This should account for wear, friction, and mass inertia. We highly recommend that you dry test some G-code programs with your new settings before committing to them. Sometimes the loading on your machine is different when moving in all axes together.",
   $130: "This sets the maximum travel from end to end for each axis in mm. This is only useful if you have soft limits (and homing) enabled, as this is only used by Grbl's soft limit feature to check if you have exceeded your machine limits with a motion command.",
   $131: "This sets the maximum travel from end to end for each axis in mm. This is only useful if you have soft limits (and homing) enabled, as this is only used by Grbl's soft limit feature to check if you have exceeded your machine limits with a motion command.",
-  $132: "This sets the maximum travel from end to end for each axis in mm. This is only useful if you have soft limits (and homing) enabled, as this is only used by Grbl's soft limit feature to check if you have exceeded your machine limits with a motion command."
+  $132: "This sets the maximum travel from end to end for each axis in mm. This is only useful if you have soft limits (and homing) enabled, as this is only used by Grbl's soft limit feature to check if you have exceeded your machine limits with a motion command.",
+  $133: "This sets the maximum travel from end to end for each axis in degree. This is only useful if you have soft limits (and homing) enabled, as this is only used by Grbl's soft limit feature to check if you have exceeded your machine limits with a motion command.",
+  $134: "This sets the maximum travel from end to end for each axis in degree. This is only useful if you have soft limits (and homing) enabled, as this is only used by Grbl's soft limit feature to check if you have exceeded your machine limits with a motion command.",
+  $135: "This sets the maximum travel from end to end for each axis in degree. This is only useful if you have soft limits (and homing) enabled, as this is only used by Grbl's soft limit feature to check if you have exceeded your machine limits with a motion command."
 }

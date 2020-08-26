@@ -592,9 +592,9 @@ function selectMachine(type) {
     var grblParams_def = {
       $0: "10", //"Step pulse time, microseconds"
       $1: "255", //"Step idle delay, milliseconds"
-      $2: "0", //"Step pulse invert, mask"
-      $3: "3", //"Step direction invert, mask"
-      $4: "1", //"Invert step enable pin, boolean"
+      $2: "7", //"Step pulse invert, mask"
+      $3: "5", //"Step direction invert, mask"
+      $4: "0", //"Invert step enable pin, boolean"
       $5: "0", //"Invert limit pins, boolean"
       $6: "0", //"Invert probe pin, boolean"
       $10: "2", //"Status report options, mask"
@@ -612,9 +612,10 @@ function selectMachine(type) {
       $30: "1000", //"Maximum spindle speed, RPM"
       $31: "0", //"Minimum spindle speed, RPM"
       $32: "0", //"Maximum spindle speed, RPM"
-      $100: "199.100", //"X-axis steps per millimeter"
-      $101: "199.100", //"Y-axis steps per millimeter"
-      $102: "199.100", //"Z-axis steps per millimeter"
+      $100: "800.000", //"X-axis steps per millimeter"
+      $101: "800.000", //"Y-axis steps per millimeter"
+      $102: "800.000", //"Z-axis steps per millimeter"
+      $103: "800.000", //"Z-axis steps per millimeter"
       $110: "1500.000", //"X-axis maximum rate, mm/min"
       $111: "1500.000", //"Y-axis maximum rate, mm/min"
       $112: "1500.000", //"Z-axis maximum rate, mm/min"
@@ -781,19 +782,19 @@ function selectMachine(type) {
       $131: "730", //"Y-axis maximum travel, millimeters"
       $132: "90", //"Z-axis maximum travel, millimeters"
     }
-  } else if (type == "custom") {
-    // Leadmachine 55
+  } else if (type == "grbl-lpc") {
+    // grbl-LPC
     var customFirmware = false;
     var grblParams_def = {
       $0: "10", //"Step pulse time, microseconds"
       $1: "255", //"Step idle delay, milliseconds"
-      $2: "0", //"Step pulse invert, mask"
-      $3: "4", //"Step direction invert, mask"
-      $4: "1", //"Invert step enable pin, boolean"
-      $5: "0", //"Invert limit pins, boolean"
+      $2: "7", //"Step pulse invert, mask"
+      $3: "5", //"Step direction invert, mask"
+      $4: "0", //"Invert step enable pin, boolean"
+      $5: "1", //"Invert limit pins, boolean"
       $6: "0", //"Invert probe pin, boolean"
-      $10: "1", //"Status report options, mask"
-      $11: "0.020", //"Junction deviation, millimeters"
+      $10: "2", //"Status report options, mask"
+      $11: "0.010", //"Junction deviation, millimeters"
       $12: "0.002", //"Arc tolerance, millimeters"
       $13: "0", //"Report in inches, boolean"
       $20: "0", //"Soft limits enable, boolean"
@@ -802,23 +803,136 @@ function selectMachine(type) {
       $23: "3", //"Homing direction invert, mask"
       $24: "100.000", //"Homing locate feed rate, mm/min"
       $25: "1000.000", //"Homing search seek rate, mm/min"
-      $26: "250", //"Homing switch debounce delay, milliseconds"
-      $27: "5.000", //"Homing switch pull-off distance, millimeters"
-      $30: "1000", //"Maximum spindle speed, RPM"
-      $31: "0", //"Minimum spindle speed, RPM"
-      $32: "0", //"Maximum spindle speed, RPM"
-      $100: "199.100", //"X-axis steps per millimeter"
-      $101: "199.100", //"Y-axis steps per millimeter"
-      $102: "199.100", //"Z-axis steps per millimeter"
+      $26: "25", //"Homing switch debounce delay, milliseconds"
+      $27: "1.000", //"Homing switch pull-off distance, millimeters"
+      $30: "12000", //"Maximum spindle speed, RPM"
+      $31: "1000", //"Minimum spindle speed, RPM"
+      $32: "0", //"Laser-mode enable, boolean"
+      $33: "5000", //"PMW Hz"
+      $34: "0", //"%"
+      $35: "1", //"%"
+      $36: "100", //"%"
+      $100: "800.000", //"X-axis steps per millimeter"
+      $101: "800.000", //"Y-axis steps per millimeter"
+      $102: "800.000", //"Z-axis steps per millimeter"
+      $103: "800.000", //"A-axis steps per millimeter"
+      $104: "533.000", //"B-axis steps per millimeter"
+      $105: "533.000", //"C-axis steps per millimeter"
       $110: "2500.000", //"X-axis maximum rate, mm/min"
       $111: "2500.000", //"Y-axis maximum rate, mm/min"
       $112: "2500.000", //"Z-axis maximum rate, mm/min"
-      $120: "150.000", //"X-axis acceleration, mm/sec^2"
-      $121: "150.000", //"Y-axis acceleration, mm/sec^2"
-      $122: "150.000", //"Z-axis acceleration, mm/sec^2"
-      $130: "1000", //"X-axis maximum travel, millimeters"
-      $131: "1000", //"Y-axis maximum travel, millimeters"
-      $132: "100", //"Z-axis maximum travel, millimeters"
+      $113: "2500.000", //"A-axis maximum rate, mm/min"
+      $120: "200.000", //"X-axis acceleration, mm/sec^2"
+      $121: "200.000", //"Y-axis acceleration, mm/sec^2"
+      $122: "200.000", //"Z-axis acceleration, mm/sec^2"
+      $123: "200.000", //"A-axis acceleration, mm/sec^2"
+      $130: "203.000", //"X-axis maximum travel, millimeters"
+      $131: "123.000", //"Y-axis maximum travel, millimeters"
+      $132: "73.000", //"Z-axis maximum travel, millimeters"
+      $133: "360.000", //"A-axis maximum travel, degrees"
+      $140: "0.000", //"X-axis driver current, amps"
+      $141: "0.000", //"Y-axis driver current, amps"
+      $142: "0.000", //"Z-axis driver current, amps"
+      $143: "0.000", //"A-axis driver current, amps"
+    }
+  } else if (type == "grbl-mega-5x") {
+    // grbl-Mega-5X
+    var customFirmware = false;
+    var grblParams_def = {
+      $0: "10", //"Step pulse time, microseconds"
+      $1: "255", //"Step idle delay, milliseconds"
+      $2: "7", //"Step pulse invert, mask"
+      $3: "5", //"Step direction invert, mask"
+      $4: "0", //"Invert step enable pin, boolean"
+      $5: "0", //"Invert limit pins, boolean"
+      $6: "0", //"Invert probe pin, boolean"
+      $10: "2", //"Status report options, mask"
+      $11: "0.010", //"Junction deviation, millimeters"
+      $12: "0.002", //"Arc tolerance, millimeters"
+      $13: "0", //"Report in inches, boolean"
+      $20: "0", //"Soft limits enable, boolean"
+      $21: "0", //"Hard limits enable, boolean"
+      $22: "1", //"Homing cycle enable, boolean"
+      $23: "3", //"Homing direction invert, mask"
+      $24: "100.000", //"Homing locate feed rate, mm/min"
+      $25: "1000.000", //"Homing search seek rate, mm/min"
+      $26: "25", //"Homing switch debounce delay, milliseconds"
+      $27: "1.000", //"Homing switch pull-off distance, millimeters"
+      $30: "12000", //"Maximum spindle speed, RPM"
+      $31: "1000", //"Minimum spindle speed, RPM"
+      $32: "0", //"Laser-mode enable, boolean"
+      $100: "800.000", //"X-axis steps per millimeter"
+      $101: "800.000", //"Y-axis steps per millimeter"
+      $102: "800.000", //"Z-axis steps per millimeter"
+      $103: "68.000", //"A-axis steps per millimeter"
+      $104: "68.000", //"B-axis steps per millimeter"
+      $105: "68.000", //"C-axis steps per millimeter"
+      $110: "2500.000", //"X-axis maximum rate, mm/min"
+      $111: "2500.000", //"Y-axis maximum rate, mm/min"
+      $112: "2500.000", //"Z-axis maximum rate, mm/min"
+      $113: "2500.000", //"A-axis maximum rate, mm/min"
+      $114: "2500.000", //"B-axis maximum rate, mm/min"
+      $115: "2500.000", //"C-axis maximum rate, mm/min"
+      $120: "200.000", //"X-axis acceleration, mm/sec^2"
+      $121: "200.000", //"Y-axis acceleration, mm/sec^2"
+      $122: "200.000", //"Z-axis acceleration, mm/sec^2"
+      $123: "200.000", //"A-axis acceleration, mm/sec^2"
+      $124: "200.000", //"B-axis acceleration, mm/sec^2"
+      $125: "200.000", //"C-axis acceleration, mm/sec^2"
+      $130: "203.000", //"X-axis maximum travel, millimeters"
+      $131: "123.000", //"Y-axis maximum travel, millimeters"
+      $132: "73.000", //"Z-axis maximum travel, millimeters"
+      $133: "360.000", //"A-axis maximum travel, degrees"
+      $134: "360.000", //"B-axis maximum travel, degrees"
+      $135: "360.000", //"C-axis maximum travel, degrees"
+      $140: "0.000", //"X-axis driver current, amps"
+      $141: "0.000", //"Y-axis driver current, amps"
+      $142: "0.000", //"Z-axis driver current, amps"
+      $143: "0.000", //"A-axis driver current, amps"
+      $144: "0.000", //"B-axis driver current, amps"
+      $145: "0.000", //"C-axis driver current, amps"
+    }
+  } else if (type == "custom") {
+    // Leadmachine 55
+    var customFirmware = false;
+    var grblParams_def = {
+      $0: "10", //"Step pulse time, microseconds"
+      $1: "255", //"Step idle delay, milliseconds"
+      $2: "7", //"Step pulse invert, mask"
+      $3: "5", //"Step direction invert, mask"
+      $4: "0", //"Invert step enable pin, boolean"
+      $5: "1", //"Invert limit pins, boolean"
+      $6: "0", //"Invert probe pin, boolean"
+      $10: "2", //"Status report options, mask"
+      $11: "0.010", //"Junction deviation, millimeters"
+      $12: "0.002", //"Arc tolerance, millimeters"
+      $13: "0", //"Report in inches, boolean"
+      $20: "0", //"Soft limits enable, boolean"
+      $21: "0", //"Hard limits enable, boolean"
+      $22: "1", //"Homing cycle enable, boolean"
+      $23: "3", //"Homing direction invert, mask"
+      $24: "100.000", //"Homing locate feed rate, mm/min"
+      $25: "1000.000", //"Homing search seek rate, mm/min"
+      $26: "25", //"Homing switch debounce delay, milliseconds"
+      $27: "1.000", //"Homing switch pull-off distance, millimeters"
+      $30: "12000", //"Maximum spindle speed, RPM"
+      $31: "1000", //"Minimum spindle speed, RPM"
+      $32: "0", //"Laser-mode enable, boolean"
+      $100: "800.000", //"X-axis steps per millimeter"
+      $101: "800.000", //"Y-axis steps per millimeter"
+      $102: "800.000", //"Z-axis steps per millimeter"
+      $110: "2500.000", //"X-axis maximum rate, mm/min"
+      $111: "2500.000", //"Y-axis maximum rate, mm/min"
+      $112: "2500.000", //"Z-axis maximum rate, mm/min"
+      $120: "200.000", //"X-axis acceleration, mm/sec^2"
+      $121: "200.000", //"Y-axis acceleration, mm/sec^2"
+      $122: "200.000", //"Z-axis acceleration, mm/sec^2"
+      $130: "203.000", //"X-axis maximum travel, millimeters"
+      $131: "123.000", //"Y-axis maximum travel, millimeters"
+      $132: "73.000", //"Z-axis maximum travel, millimeters"
+      $140: "0.000", //"X-axis driver current, amps"
+      $141: "0.000", //"Y-axis driver current, amps"
+      $142: "0.000", //"Z-axis driver current, amps"
     }
   }
   for (var key in grblParams_def) {
@@ -841,22 +955,22 @@ function selectMachine(type) {
           title: "Custom Firmware Required",
           content: `<div>The machine type you selected, needs a custom firmware. Please use the Firmware Flashing Wizard to upload a custom firmware image to the controller to properly support this machine. </div>`,
           actions: [{
-              caption: "No Thank you",
-              cls: "js-dialog-close",
-              onclick: function() {
-                console.log("Do nothing")
-              }
-            },
-            {
-              caption: "Launch the Flashing Wizard",
-              cls: "js-dialog-close success",
-              onclick: function() {
-                populateGrblBuilderToolForm();
-                setTimeout(function() {
-                  $('#grblAxesCount').data('select').val('2axes')
-                }, 500)
-              }
-            },
+            caption: "No Thank you",
+            cls: "js-dialog-close",
+            onclick: function () {
+              console.log("Do nothing")
+            }
+          },
+          {
+            caption: "Launch the Flashing Wizard",
+            cls: "js-dialog-close success",
+            onclick: function () {
+              populateGrblBuilderToolForm();
+              setTimeout(function () {
+                $('#grblAxesCount').data('select').val('2axes')
+              }, 500)
+            }
+          },
 
           ]
         });
@@ -868,22 +982,22 @@ function selectMachine(type) {
           title: "Custom Firmware Required",
           content: `<div>The machine type you selected, needs a custom firmware. Please use the Firmware Flashing Wizard to upload a custom firmware image to the controller to properly support this machine. </div>`,
           actions: [{
-              caption: "No Thank you",
-              cls: "js-dialog-close",
-              onclick: function() {
-                console.log("Do nothing")
-              }
-            },
-            {
-              caption: "Launch the Flashing Wizard",
-              cls: "js-dialog-close success",
-              onclick: function() {
-                populateGrblBuilderToolForm();
-                setTimeout(function() {
-                  $('#grblAxesCount').data('select').val('servo')
-                }, 500)
-              }
-            },
+            caption: "No Thank you",
+            cls: "js-dialog-close",
+            onclick: function () {
+              console.log("Do nothing")
+            }
+          },
+          {
+            caption: "Launch the Flashing Wizard",
+            cls: "js-dialog-close success",
+            onclick: function () {
+              populateGrblBuilderToolForm();
+              setTimeout(function () {
+                $('#grblAxesCount').data('select').val('servo')
+              }, 500)
+            }
+          },
 
           ]
         });
@@ -948,6 +1062,12 @@ function setMachineButton(type) {
     overlaytype = type;
   } else if (type == "custom") {
     template = `<img src="img/mch/` + type + `.png"/>  Custom Machine`
+    overlaytype = type;
+  } else if (type == "grbl-lpc") {
+    template = `<img src="img/mch/custom.png"/>  grbl-LPC`
+    overlaytype = type;
+  } else if (type == "grbl-mega-5x") {
+    template = `<img src="img/mch/custom.png"/>  grbl-Mega-5X`
     overlaytype = type;
   } else {
     template = `<img src="img/mch/sphinx55.png"/>  Select Machine`
