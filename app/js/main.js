@@ -9,7 +9,7 @@ function setWindowTitle(status) {
 
   if (status) {
     string += " v" + status.driver.version
-  } else {
+  } else if (laststatus) {
     string += " v" + laststatus.driver.version
   }
 
@@ -23,7 +23,7 @@ function setWindowTitle(status) {
   }
 
   $('#windowtitle').html(string)
-
+  document.title = string
 
 }
 

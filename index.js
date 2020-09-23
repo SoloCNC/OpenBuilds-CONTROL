@@ -603,13 +603,6 @@ io.on("connection", function(socket) {
     shell.openExternal('https://openbuilds.com/threads/openbuilds-control-software.13121/')
   });
 
-  socket.on("opendriverspage", function(data) {
-    const {
-      shell
-    } = require('electron')
-    shell.openExternal('https://docs.openbuilds.com/blackbox/#41-devicedrivers.html')
-  });
-
   socket.on("minimisetotray", function(data) {
     jogWindow.hide();
   });
@@ -981,6 +974,7 @@ io.on("connection", function(socket) {
             io.sockets.emit('grbl')
           }, 600)
           // Start interval for status queries
+          clearInterval(statusLoop);
           statusLoop = setInterval(function() {
             if (status.comms.connectionStatus > 0) {
               addQRealtime("?");
@@ -2331,10 +2325,10 @@ if (isElectron()) {
 } else {
   var isPi = require('detect-rpi');
   if (isPi()) {
+    DEBUG = true;
     debug_log('Running on Raspberry Pi!');
     status.driver.operatingsystem = 'rpi'
     startChrome();
-    status.driver.operatingsystem = 'raspberrypi';
   } else {
     debug_log("Running under NodeJS...");
   }
@@ -2451,7 +2445,7 @@ function startChrome() {
     const chrome = spawn('chromium-browser', ['-app=http://127.0.0.1:3000']);
     chrome.on('close', (code) => {
       debug_log(`Chromium process exited with code ${code}`);
-      debug_log(`If you want to continue using OpenBuildsCONTROL, please open Chromium Browser to http://` + ip.address() + `:3000`);
+      process.exit(0);
     });
   } else {
     debug_log('Not a Raspberry Pi. Please use Electron Instead');
