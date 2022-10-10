@@ -27,7 +27,7 @@ debug_log("Starting OpenBuilds CONTROL v" + require('./package').version)
 var config = {};
 config.webPort = process.env.WEB_PORT || 3000;
 config.posDecimals = process.env.DRO_DECIMALS || 2;
-config.grblWaitTime = 0.5;
+config.grblWaitTime = 1;
 config.firmwareWaitTime = 4;
 
 var express = require("express");
